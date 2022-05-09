@@ -14,12 +14,11 @@ public interface PatientRepository extends JpaRepository<Patient, Integer> {
      * Retrieve and check if a user has been saved
      */
 
-    @Query("SELECT COUNT(u) FROM Patient u WHERE u.lastName=?1")
-    long findExistingPatient(String lastname);
 
-    long countByLastName(String name);
 
-    boolean existsPatientByLastName(String lastname);
+
+
+    boolean existsPatientsByLastName(String patient_lastname);
 
 
     /**

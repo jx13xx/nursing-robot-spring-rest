@@ -4,16 +4,15 @@ import com.example.nursingrobotspringrest.model.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.UniqueConstraint;
 
 
 @Entity
 public class Patient extends BaseEntity {
 
-    @Column(name= "patient_firstname", unique = true)
+    @Column(name= "patient_firstname" )
     private String patient_firstname;
 
-    @Column(name ="lastName", unique = true)
+    @Column(name ="lastName")
     private String lastName;
 
     @Column(name = "age")
@@ -22,13 +21,26 @@ public class Patient extends BaseEntity {
     @Column(name = "gender")
     private String gender;
 
+    public boolean isCovid() {
+        return isCovid;
+    }
+
+    public void setCovid(boolean covid) {
+        isCovid = covid;
+    }
+
+
+
+    private boolean isCovid;
+
     @Override
     public String toString() {
         return "Patient{" +
                 "patient_firstname='" + patient_firstname + '\'' +
-                ", patient_lastname='" + lastName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", age=" + age +
                 ", gender='" + gender + '\'' +
+                ", isCovid=" + isCovid +
                 ", blood_group='" + blood_group + '\'' +
                 '}';
     }
@@ -36,11 +48,12 @@ public class Patient extends BaseEntity {
     public Patient() {
     }
 
-    public Patient(String patient_firstname, String patient_lastname, Integer age, String gender, String blood_group) {
+    public Patient(String patient_firstname, String lastName, Integer age, String gender, boolean isCovid, String blood_group) {
         this.patient_firstname = patient_firstname;
-        this.lastName = patient_lastname;
+        this.lastName = lastName;
         this.age = age;
         this.gender = gender;
+        this.isCovid = isCovid;
         this.blood_group = blood_group;
     }
 
@@ -52,11 +65,11 @@ public class Patient extends BaseEntity {
         this.patient_firstname = patient_firstname;
     }
 
-    public String getPatient_lastname() {
+    public String getlastName() {
         return lastName;
     }
 
-    public void setPatient_lastname(String patient_lastname) {
+    public void setlastName(String lastName) {
         this.lastName = lastName;
     }
 

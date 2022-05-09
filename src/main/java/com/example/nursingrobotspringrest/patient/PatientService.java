@@ -26,11 +26,13 @@ public class PatientService {
         CustomResponse response = new CustomResponse();
         try{
 
-            String previousPatient = patient.getPatient_lastname();
+            String previousPatient = patient.getlastName();
+            System.out.println("Previous patient" + previousPatient);
+            System.out.println(db.patientExist(previousPatient));
             if(!db.patientExist(previousPatient)){
-                System.out.println("Patient saved properly");
+
                  patientRepository.save(patient);
-                 
+                System.out.println("Patient saved properly");
 
                  return response.returnMessage(PATIENT_CREATED_SUCESSFULLY, patient.getId().toString());
 
