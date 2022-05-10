@@ -2,16 +2,18 @@ package com.example.nursingrobotspringrest.patient;
 
 import com.example.nursingrobotspringrest.dto.CustomResponse;
 import com.example.nursingrobotspringrest.exceptions.ConflictErrorException;
+import com.example.nursingrobotspringrest.exceptions.NotFoundErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 import static com.example.nursingrobotspringrest.constants.Constants.PATIENT_CREATED_SUCESSFULLY;
 import static com.example.nursingrobotspringrest.constants.Constants.PATIENT_FAILED_TO_CREATED;
-
+import static com.example.nursingrobotspringrest.constants.Constants.NO_PATIENT_FOUND;
 
 @Component
 public class PatientService {
@@ -27,12 +29,10 @@ public class PatientService {
         try{
 
             String previousPatient = patient.getlastName();
-            System.out.println("Previous patient" + previousPatient);
-            System.out.println(db.patientExist(previousPatient));
             if(!db.patientExist(previousPatient)){
 
                  patientRepository.save(patient);
-                System.out.println("Patient saved properly");
+
 
                  return response.returnMessage(PATIENT_CREATED_SUCESSFULLY, patient.getId().toString());
 
@@ -43,6 +43,31 @@ public class PatientService {
 
         }
         throw new ConflictErrorException(PATIENT_FAILED_TO_CREATED);
+    }
+
+    public List<Patient> fetchAllPatients(){
+        try {
+
+
+            return patientRepository.findAll();
+        }
+        catch (Exception ex){
+            System.out.println(ex);
+        }
+
+        throw new NotFoundErrorException(NO_PATIENT_FOUND);
+    }
+
+    public Optional<Patient> fetchSpecificPatient(String uuid){
+        UUID patientID = UUID.fromString(uuid);
+
+        Optional<Patient> patient = patientRepository.findById(patientID);
+
+            if(!patient.isPresent()){
+                throw new NotFoundErrorException(NO_PATIENT_FOUND);
+            }
+
+        return  patientRepository.findById(patientID);
     }
 
 }

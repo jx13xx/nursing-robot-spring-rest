@@ -1,16 +1,10 @@
 package com.example.nursingrobotspringrest.patient;
 
-import com.example.nursingrobotspringrest.dto.CustomResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
-import static com.example.nursingrobotspringrest.constants.Constants.PATIENT_CREATED_SUCESSFULLY;
+import java.util.*;
 
 @RestController
 public class PatientController {
@@ -25,6 +19,23 @@ public class PatientController {
 
 
         return response;
+
+    }
+
+    @GetMapping("/patient")
+    @ResponseStatus(HttpStatus.OK)
+    public HashMap<String, Object> retrieveAllPatients(){
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("data", patientService.fetchAllPatients());
+
+        return map;
+
+    }
+
+    @GetMapping("/retrievePatient")
+    @ResponseStatus(HttpStatus.OK)
+    public Optional<Patient> retriveSpecificPatient(@RequestParam(name = "id", required = true) String uuid){
+        return patientService.fetchSpecificPatient(uuid);
 
     }
 }
