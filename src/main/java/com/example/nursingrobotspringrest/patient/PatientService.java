@@ -3,11 +3,13 @@ package com.example.nursingrobotspringrest.patient;
 import com.example.nursingrobotspringrest.dto.CustomResponse;
 import com.example.nursingrobotspringrest.exceptions.ConflictErrorException;
 import com.example.nursingrobotspringrest.exceptions.NotFoundErrorException;
+import com.example.nursingrobotspringrest.utility.FileWrite;
 import com.example.nursingrobotspringrest.utility.OKHttpConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,6 +30,9 @@ public class PatientService {
 
     @Autowired
     OKHttpConnection pyclient;
+
+    @Autowired
+    FileWrite uploadFile;
 
     public Map<String, String> savePatient(Patient patient){
         CustomResponse response = new CustomResponse();
@@ -75,9 +80,16 @@ public class PatientService {
         return  patientRepository.findById(patientID);
     }
 
-    public StringBuffer identifyPatient(MultipartFile file){
-         return pyclient.sendRequest();
+    public String identifyPatient(MultipartFile file){
+        try {
+           String uploadedFile =  uploadFile.writeToServer(file);
+            pyclient.sendRequest(uploadedFile);
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        return pyclient.sendRequest(file);
+        return "file saved";
     }
 
 }
